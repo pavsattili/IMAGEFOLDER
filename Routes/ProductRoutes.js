@@ -1,7 +1,7 @@
 var express = require("express")
 const { getAllProducts, getSingleProduct, addNewProduct, updateProduct, deleteProduct } = require("../Controller/ProductController")
 const adminMiddleware = require('../Middleware/adminMiddleware');
-const authMiddleware = require("../Middleware/authmiddleware")
+const authMiddleware = require("../Middleware/authMiddleware")
 var upload= require("../Middleware/imageMiddleware")
 
 
