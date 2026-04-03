@@ -22,7 +22,7 @@ app.use("/api/profileRoutes",profileRoutes)
 connectToDatabase()
 
 
-var port = process.env.PORT
+var port = process.env.PORT || 3000
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
