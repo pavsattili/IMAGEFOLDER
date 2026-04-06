@@ -6,6 +6,7 @@ var userRoutes = require("./Routes/userRoutes")
 var productRoutes = require("./Routes/ProductRoutes")
 var profileRoutes = require("./Routes/ProfileRoutes")
 var cartRoutes = require("./Routes/CartRoutes")
+var  paymentRoutes = require("./Routes/paymentRoutes")
 var app = express()
 
 
@@ -17,6 +18,7 @@ app.use("/api/productRoutes",productRoutes)
  
 app.use("/api/profileRoutes",profileRoutes)
 app.use("/api/cartRoutes",cartRoutes)
+app.use("/api/paymentRoutes",paymentRoutes)
 
 
 
