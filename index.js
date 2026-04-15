@@ -7,6 +7,9 @@ var productRoutes = require("./Routes/ProductRoutes")
 var profileRoutes = require("./Routes/ProfileRoutes")
 var cartRoutes = require("./Routes/CartRoutes")
 var  paymentRoutes = require("./Routes/paymentRoutes")
+var orderRoutes = require("./Routes/OrderRoutes")
+const {connectRedis} = require("./config/redisClient")
+
 var app = express()
 
 
@@ -21,9 +24,13 @@ app.use("/api/cartRoutes",cartRoutes)
 app.use("/api/paymentRoutes",paymentRoutes)
 
 
+app.use("/api/orderRoutes",orderRoutes)
+
+
 
 connectToDatabase()
 
+connectRedis()
 
 var port = process.env.PORT || 3000
 

@@ -5,7 +5,7 @@ var mongoose = require('mongoose')
 var getCart = async (req, res) => {
     try {
         var userId = req.user.id
-        var cart = await Cart.findOne({ userId }).populate("items.product") // optional
+        var cart = await Cart.findOne({ userId })
 
         res.status(200).json({ cart })
     } catch (error) {

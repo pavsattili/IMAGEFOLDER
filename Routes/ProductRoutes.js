@@ -10,9 +10,9 @@ var router = express.Router()
 
 
 
-router.get("/products",authMiddleware,getAllProducts)
+router.get("/products", getAllProducts)
 
-router.get("/products/:id",authMiddleware,adminMiddleware,getSingleProduct)
+router.get("/products/:id",adminMiddleware,getSingleProduct)
 
 router.post("/addproduct",authMiddleware, upload.single("image"),addNewProduct)
 

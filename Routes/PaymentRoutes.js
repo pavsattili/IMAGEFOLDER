@@ -1,12 +1,15 @@
-var express = require("express");
-var router = express.Router();
+var express = require("express")
 
-var { paymentController } = require("../Controller/paymentController");
+const { paymentController } = require("../Controller/paymentController")
+const { verifyPayment } = require("../Controller/verifyPaymentController")
+const authMiddleware = require("../Middleware/authMiddleware")
 
-// middleware (JWT authentication)
-var authMiddleware = require("../Middleware/authMiddleware");
+var router = express.Router()
 
-// create order / payment
-router.post("/checkout", authMiddleware, paymentController);
+// ✅ Checkout route
+router.post("/checkout", authMiddleware, paymentController)
 
-module.exports = router;
+// ✅ Verify payment route
+router.post("/verifypayment", authMiddleware, verifyPayment)
+
+module.exports = router

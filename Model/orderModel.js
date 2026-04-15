@@ -3,21 +3,20 @@ var mongoose = require("mongoose")
 
 var orderSchema = new mongoose.Schema({
     userId : {
-        type : String
+        type: mongoose.Schema.Types.ObjectId,
     },
     items : [
         {
             product : {
-                type : String
+                type : mongoose.Schema.Types.ObjectId,
             },
             quantity : {
-                type : String
-                
+                type : Number,
             }
         }
     ],
     totalAmount : {
-        type : Number
+        type : Number,
     },
     status : {
         type  : String,
