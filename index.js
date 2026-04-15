@@ -1,39 +1,50 @@
-require("dotenv").config()
+require("dotenv").config();
+var cors = require("cors");
+var express = require("express");
 
-var express = require("express")
-const connectToDatabase = require("./Database/db");
-var userRoutes = require("./Routes/userRoutes")
-var productRoutes = require("./Routes/ProductRoutes")
-var profileRoutes = require("./Routes/ProfileRoutes")
-var cartRoutes = require("./Routes/CartRoutes")
-var  paymentRoutes = require("./Routes/paymentRoutes")
-var orderRoutes = require("./Routes/OrderRoutes")
-const {connectRedis} = require("./config/redisClient")
+const connectToDatabase = require("./database/db.js");
+const { connectRedis } = require("./config/redisClient.js");
+const { createLimiters } = require("./Middleware/rateLimiter");
 
-var app = express()
+// routes
+var useRoutes = require("./Routes/userRoutes");
+var productRoutes = require("./Routes/ProductRoutes.js");
+var profileRoutes = require("./Routes/profileRoutes.js");
+var cartRoutes = require("./Routes/cartRoutes.js");
+var paymentRoutes = require("./Routes/paymentRoutes.js");
+var orderRoutes = require("./Routes/OrderRoutes.js");
 
+var app = express();
 
-app.use(express.json())
-
-app.use("/api/userRoutes",userRoutes)
-
-app.use("/api/productRoutes",productRoutes)
- 
-app.use("/api/profileRoutes",profileRoutes)
-app.use("/api/cartRoutes",cartRoutes)
-app.use("/api/paymentRoutes",paymentRoutes)
-
-
-app.use("/api/orderRoutes",orderRoutes)
+app.use(cors());
+app.use(express.json());
 
 
 
-connectToDatabase()
+const startServer = async () => {
+  // ✅ 1. Connect Redis FIRST
+  await connectRedis();
 
-connectRedis()
+  // ✅ 2. Create limiters AFTER Redis
+  const { productLimiter, adminLimiter } = createLimiters();
 
-var port = process.env.PORT || 3000
+  // ✅ 3. Apply limiters
+  app.use("/api/productRoutes", productLimiter, productRoutes);
+  app.use("/api/adminRoutes", adminLimiter); // optional for admin
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+  // routes
+  app.use("/api/userRoutes", useRoutes);
+  app.use("/api/profileRoutes", profileRoutes);
+  app.use("/api/cartRoutes", cartRoutes);
+  app.use("/api/paymentRoutes", paymentRoutes);
+  app.use("/api/orderRoutes", orderRoutes);
+
+  // DB
+  await connectToDatabase();
+
+  app.listen(process.env.PORT, () => {
+    console.log("The server is running");
+  });
+};
+
+startServer();
